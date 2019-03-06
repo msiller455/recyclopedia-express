@@ -53,15 +53,43 @@ router.post('/login', async (req, res) => {
   }
 })
 
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if(err){
+      res.send(err)
+    } else {
+      console.log("user logged out")
+    }
+  })
+})
 
-/* GET users listing. */
+
+/* GET all users. */
 router.get('/', async (req, res, next) => {
   try {
-    console.log("hitting the route yo")
+    const foundUsers = await User.find()
+    res.json({
+      status: 200,
+      data: foundUsers
+    })
   } catch(err) {
     res.send(err)
   }
 });
+
+// GET User Profile
+router.get('/:id', async (req, res, next) => {
+  try {
+    const foundUser = await User.findById(req.params.id)
+    console.log(foundUser)
+    res.json({
+      status: 200,
+      data: foundUser
+    })
+  } catch(err) {
+    res.send(err)
+  }
+})
 
 
 
