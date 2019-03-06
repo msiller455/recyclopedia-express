@@ -81,7 +81,6 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const foundUser = await User.findById(req.params.id)
-    console.log(foundUser)
     res.json({
       status: 200,
       data: foundUser
@@ -91,6 +90,30 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+// EDIT User Profile
+router.put('/:id', async (req, res, next) => {
+  try{
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, Object.assign(req.body), {new: true})
+    res.json({
+      status: 200,
+      data: updatedUser
+    })
+  } catch(err) {
+    res.send(err)
+  }
+})
 
+// Delete User Profile
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndRemove(req.params.id)
+    res.json({
+      status: 200,
+      data: deletedUser
+    })
+  } catch(err) {
+    res.send(err)
+  }
+})
 
 module.exports = router;
