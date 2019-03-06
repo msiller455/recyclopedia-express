@@ -4,6 +4,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const session = require('express-session')
+const cors = require('cors')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
@@ -23,12 +24,20 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use(cors())
 app.use(session({
   secret: 'sustainability',
   cookie: { maxAge: 60000 },
   resave: false,
   saveUninitialized: false
 }))
+
+const corsOptions = {
+  origin: ['http://localhost:3000'],
+  credentials: true,
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 
 
