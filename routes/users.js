@@ -17,10 +17,7 @@ router.post('/', async (req, res) => {
     req.session.username = createdUser.username
     req.session.logged = true
     req.session.userId = createdUser._id
-    res.json({
-      status: 200,
-      data: createdUser
-    })
+    res.json(createdUser)
   } catch(err) {
     res.send(err);
   }
@@ -35,11 +32,7 @@ router.post('/login', async (req, res) => {
         req.session.username = foundUser.username
         req.session.logged = true
         req.session.userId = foundUser._id
-        console.log('login route hitting')
-        res.json({
-          status: 200,
-          data: foundUser
-        })
+        res.json(foundUser)
       } else {
         req.session.message = "Incorrect username or password."
         console.log(req.session.message)
