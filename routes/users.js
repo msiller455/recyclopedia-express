@@ -53,10 +53,7 @@ router.get('/logout', (req, res) => {
 router.get('/', async (req, res, next) => {
   try {
     const foundUsers = await User.find()
-    res.json({
-      status: 200,
-      data: foundUsers
-    })
+    res.json({users: foundUsers})
   } catch(err) {
     res.send(err)
   }
