@@ -2,11 +2,32 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const userSchema = mongoose.Schema({
-    username: String,
-    name: String,
-    email: String,
-    password: String,
-    verifyPassword: String,
+    username: {
+        type: String,
+        required: true
+    },
+    // username: {
+    //     type: String,
+    //     unique: true,
+    //     required: true
+    // },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    // email: {
+    //     type: String,
+    //     unique: true,
+    //     required: true
+    // },
+    password: {
+        type: String,
+        required: true
+    },
     events: [Number],
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })

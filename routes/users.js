@@ -5,21 +5,16 @@ const axios = require('axios')
 const bcrypt = require('bcryptjs')
 
 router.post('/', async (req, res) => {
-  const password = req.body.password
-  const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-  const userDbEntry = {}
-  userDbEntry.username = req.body.username
-  userDbEntry.name = req.body.name
-  userDbEntry.email = req.body.email
-  userDbEntry.password = hashedPassword
-  try {
-    const createdUser = await User.create(userDbEntry)
-    req.session.username = createdUser.username
-    req.session.logged = true
-    req.session.userId = createdUser._id
-    res.json(createdUser)
-  } catch(err) {
-    res.send(err);
+  const userName = await User.findOne({username: req.body.username})
+  const userEmail = await User.findOne({email: req.body.email})
+  if(userName) {
+    res.json({message: "This username is already taken", isCreated: false})
+  } else if(userEmail){
+    res.json({message: "There is already an account attached to this email", isCreated: false})
+  } else {
+    req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+    const createdUser = await User.create(req.body)
+    res.json({createdUser, isCreated: true})
   }
 })
 
@@ -28,18 +23,15 @@ router.post('/login', async (req, res) => {
     const foundUser = await User.findOne({username: req.body.username})
     if(foundUser){
       if(bcrypt.compareSync(req.body.password, foundUser.password)) {
-        req.session.message = ''
         req.session.username = foundUser.username
         req.session.logged = true
         req.session.userId = foundUser._id
-        res.json(foundUser)
+        res.json({foundUser, isLoggedIn: true})
       } else {
-        req.session.message = "Incorrect username or password."
-        console.log(req.session.message)
+        res.json({message: "Incorrect password", isLoggedIn: false})
       }
     } else {
-      req.session.message = "User does not exist"
-      console.log(req.session.message)
+      res.json({message: "Username does not exist", isLoggedIn: false})
     }
   } catch (err) {
     res.send(err)
@@ -51,7 +43,7 @@ router.get('/logout', (req, res) => {
     if(err){
       res.send(err)
     } else {
-      console.log("user logged out")
+      res.json({isLoggedOut: true})
     }
   })
 })
@@ -85,14 +77,15 @@ router.get('/:id', async (req, res, next) => {
 
 // EDIT User Profile
 router.put('/:id', async (req, res, next) => {
-  try{
+  const userName = await User.findOne({username: req.body.username})
+  const userEmail = await User.findOne({email: req.body.email})
+  if(userName) {
+    res.json({message: "This username is already taken", isUpdated: false})
+  } else if(userEmail) {
+    res.json({message: "There is already an account attached to this email"})
+  } else {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, Object.assign(req.body), {new: true})
-    res.json({
-      status: 200,
-      data: updatedUser
-    })
-  } catch(err) {
-    res.send(err)
+    res.json({updatedUser, isUpdated: true})
   }
 })
 
