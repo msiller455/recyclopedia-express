@@ -26,6 +26,8 @@ router.post('/login', async (req, res) => {
         req.session.username = foundUser.username
         req.session.logged = true
         req.session.userId = foundUser._id
+        console.log(req.session)
+        req.session.save()
         res.json({foundUser, isLoggedIn: true})
       } else {
         res.json({message: "Incorrect password", isLoggedIn: false})
@@ -63,10 +65,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const foundUser = await User.findById(req.params.id)
-    res.json({
-      status: 200,
-      data: foundUser
-    })
+    res.json({user: foundUser})
   } catch(err) {
     res.send(err)
   }

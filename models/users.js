@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    events: [Number],
+    events: [{type: Schema.Types.ObjectId, ref: 'Event'}],
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })
 
