@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const foundUser = await User.findOne({username: req.body.username})
+    const foundUser = await User.findOne({username: req.body.username}).populate('events')
     if(foundUser){
       if(bcrypt.compareSync(req.body.password, foundUser.password)) {
         req.session.username = foundUser.username

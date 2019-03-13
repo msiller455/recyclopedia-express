@@ -12,6 +12,7 @@ const eventsRouter = require('./routes/events')
 
 const app = express()
 
+require('dotenv').config()
 // Database Set up
 require('./db/db')
 
