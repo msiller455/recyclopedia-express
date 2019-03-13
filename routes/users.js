@@ -64,7 +64,7 @@ router.get('/', async (req, res, next) => {
 // GET User Profile
 router.get('/:id', async (req, res, next) => {
   try {
-    const foundUser = await User.findById(req.params.id)
+    const foundUser = await User.findById(req.params.id).populate('events')
     res.json({user: foundUser})
   } catch(err) {
     res.send(err)
