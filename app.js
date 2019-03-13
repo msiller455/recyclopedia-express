@@ -41,8 +41,6 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
-
-
 // Routes
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
