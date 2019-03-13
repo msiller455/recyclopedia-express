@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
   }
   const createdEvent = await Event.create(newEvent)
   user.events.push(createdEvent._id)
+  user.save()
   res.json(createdEvent)
 })
 
@@ -25,6 +26,17 @@ router.get('/', async function(req, res, next) {
     res.send(err)
   }
 });
+
+/* GET an event */
+router.get('/:id', async (req, res, next) => {
+  try{
+    const foundEvent = Event.findById(req.params.id).populate('users')
+    console.log(foundEvent)
+    res.json({event: foundEvent})
+  } catch(err){
+    res.send(err)
+  }
+})
 
 
 module.exports = router;

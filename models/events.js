@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const eventSchema = mongoose.Schema({
+    "event_id": Number,
     "county_region": String,
     "site_name": String,
     "created_by": String,
