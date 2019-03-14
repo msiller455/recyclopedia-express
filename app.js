@@ -12,6 +12,7 @@ const eventsRouter = require('./routes/events')
 
 const app = express()
 
+require('dotenv').config()
 // Database Set up
 require('./db/db')
 
@@ -34,13 +35,11 @@ app.use(session({
 }))
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://recyclopedia1.herokuapp.com/'],
   credentials: true,
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))
-
-
 
 // Routes
 app.use('/', indexRouter)
